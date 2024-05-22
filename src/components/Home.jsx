@@ -3,7 +3,7 @@ import QRCode from 'qrcode.react';
 import { AiOutlineLoading } from "react-icons/ai";
 
 const Home = () => {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(localStorage.getItem("token"));
 
   useEffect(() => {
     const fetchUserData = async () => {

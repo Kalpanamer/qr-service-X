@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { API_URI } from "../../url.config"
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -12,16 +14,18 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('https://newupdate-vcdv.onrender.com/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
-    });
-    const data = await response.json();
-    if (data.success) {
-      localStorage.setItem('token', data.token);
-      window.location.href = '/home';
-    } else {
+    try {
+      const response = await axios.post(`${API_URI}/login`, formData, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        alert('Login Successful');
+        window.location.href = '/home';
+      } else {
+        alert('Login failed, please try again');
+      }
+    } catch (error) {
       alert('Login failed, please try again');
     }
   };

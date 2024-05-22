@@ -5,14 +5,16 @@ import Login from './components/Login';
 import Home from './components/Home';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import VerifyEmail from './components/VerifyEmail';
 
 const App = () => {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Signup />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
       </Routes>
       <ToastContainer />
       </div>
