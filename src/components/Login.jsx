@@ -1,8 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { toast } from "react-toastify";
 import axios from 'axios';
 import { API_URI } from "../../url.config"
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      toast.success("You are already logged in", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
+    }
+  }, [navigate]);
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -15,15 +36,36 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${API_URI}/login`, formData, {
+      const response = await axios.post(`${API_URI}/auth/login`, formData, {
         headers: { 'Content-Type': 'application/json' },
       });
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
-        alert('Login Successful');
-        window.location.href = '/home';
+        toast.success(
+          "Login successful",
+          {
+            position: "bottom-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          }
+        );
+        navigate("/");
       } else {
-        alert('Login failed, please try again');
+        toast.error("Login failed, please try again", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       }
     } catch (error) {
       alert('Login failed, please try again');
@@ -31,7 +73,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       <form className="bg-white p-8 rounded shadow-md w-96" onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold mb-6 text-gray-900">Log In</h2>
         <input
@@ -54,6 +96,10 @@ const Login = () => {
           Log In
         </button>
       </form>
+      <div className='flex justify-between space-x-9 items-center' >
+        <p  className='cursor-pointer hover:underline hover:underline-offset-2' onClick={() => { navigate("/frgt-pass") }}>Forgot Password</p>
+      <p className='cursor-pointer hover:underline hover:underline-offset-2' onClick={() => { navigate("/signup") }}>Don't have account, SIGN UP</p>
+      </div>
     </div>
   );
 };

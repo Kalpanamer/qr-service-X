@@ -16,7 +16,7 @@ const VerifyEmail = () => {
   useEffect(() => {
     if (token) {
       axios
-        .get(`${API_URI}/verify-email?token=${token}`)
+        .get(`${API_URI}/auth/verify-email?token=${token}`)
         .then((response) => {
           localStorage.setItem("token", token);
           setMessage(response?.data?.msg);
