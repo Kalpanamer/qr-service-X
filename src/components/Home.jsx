@@ -35,6 +35,8 @@ const Home = () => {
           setUserData(response.data.user);
         } else {
           alert('Failed to fetch user data');
+          localStorage.removeItem('token');
+          return;
         }
       } catch (error) {
         console.error("Error fetching user data", error);

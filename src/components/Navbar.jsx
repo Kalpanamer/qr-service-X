@@ -25,9 +25,9 @@ const Navbar = () => {
                 </div>
                 <div className="hidden md:flex space-x-4">
                     { token ? (<> 
-                    <Link to="/" className="text-white hover:text-gray-200">Home</Link>
-                    <Link to="/profile" className="text-white hover:text-gray-200">Profile</Link>
-                    </>):(<Link to="/login" className="text-white hover:text-gray-200">Login</Link>)}
+                    <Link to="/" className="text-white text-2xl hover:text-gray-400">Home</Link>
+                    <Link to="/profile" className="text-white text-2xl hover:text-gray-400">Profile</Link>
+                    </>):(<Link to="/login" className="text-white text-2xl hover:text-gray-400">Login</Link>)}
                     <button
                         onClick={handleLogout}
                         className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded"

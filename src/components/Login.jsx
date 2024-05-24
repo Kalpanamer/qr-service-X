@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from "react-toastify";
 import axios from 'axios';
-import { API_URI } from "../../url.config"
+import { API_URI } from "../../url.config";
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,25 +34,35 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Basic form validation
+    if (!formData.email || !formData.password) {
+      toast.error("Email and password are required", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "dark",
+      });
+      return;
+    }
+
     try {
       const response = await axios.post(`${API_URI}/auth/login`, formData, {
         headers: { 'Content-Type': 'application/json' },
       });
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
-        toast.success(
-          "Login successful",
-          {
-            position: "bottom-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          }
-        );
+        toast.success("Login successful", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "dark",
+        });
         navigate("/");
       } else {
         toast.error("Login failed, please try again", {
@@ -63,12 +72,20 @@ const Login = () => {
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
-          progress: undefined,
           theme: "dark",
         });
       }
     } catch (error) {
-      alert('Login failed, please try again');
+      console.error("Login error", error);
+      toast.error('Login failed, please try again', {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "dark",
+      });
     }
   };
 
@@ -96,9 +113,9 @@ const Login = () => {
           Log In
         </button>
       </form>
-      <div className='flex justify-between space-x-9 items-center' >
-        <p  className='cursor-pointer hover:underline hover:underline-offset-2' onClick={() => { navigate("/frgt-pass") }}>Forgot Password</p>
-      <p className='cursor-pointer hover:underline hover:underline-offset-2' onClick={() => { navigate("/signup") }}>Don't have account, SIGN UP</p>
+      <div className='flex justify-between space-x-9 items-center'>
+        <p className='cursor-pointer hover:underline hover:underline-offset-2' onClick={() => { navigate("/frgt-pass") }}>Forgot Password</p>
+        <p className='cursor-pointer hover:underline hover:underline-offset-2' onClick={() => { navigate("/signup") }}>Don't have an account? SIGN UP</p>
       </div>
     </div>
   );

@@ -74,6 +74,7 @@ const UpdatePassword = () => {
           Update Password
         </button>
       </div>
+      <p className='cursor-pointer hover:underline hover:underline-offset-2' onClick={() => { navigate("/") }}>Go To Home</p>
     </div>
   );
 };

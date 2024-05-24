@@ -10,7 +10,7 @@ const Profile = () => {
     name: '',
     contact: '',
     address: '',
-    profileImage: null,
+    profileImage: '',
   });
   const [loading, setLoading] = useState(true);
 
@@ -63,33 +63,6 @@ const Profile = () => {
     fetchUserData();
   }, [navigate]);
 
-  const handleUpdate = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const formData = new FormData();
-      formData.append('name', userData.name);
-      formData.append('contact', userData.contact);
-      formData.append('address', userData.address);
-      if (userData.profileImage) {
-        formData.append('profileImage', userData.profileImage);
-      }
-
-      const response = await axios.post(`${API_URI}/update-profile`, formData, {
-        headers: {
-          'auth': token,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      if (response.status === 200) {
-        toast.success('Profile updated successfully');
-      }
-    } catch (error) {
-      console.error("Error updating profile", error);
-      toast.error('Failed to update profile');
-    }
-  };
-
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
@@ -98,52 +71,26 @@ const Profile = () => {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-gray-900 text-center">Profile</h2>
+        <div className='flex justify-center'>
+          <img src={userData.profileImage || ''} alt="Profile" className='h-36 w-36'/>
+        </div>
         <div className="mb-4">
           <label className="block text-gray-700">Name</label>
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-300 rounded mt-1"
-            value={userData.name || ''}
-            onChange={(e) => setUserData({ ...userData, name: e.target.value })}
-          />
+          <p>{userData.name}</p>
         </div>
         <div className="mb-4">
           <label className="block text-gray-700">Contact</label>
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-300 rounded mt-1"
-            value={userData.contact || ''}
-            onChange={(e) => setUserData({ ...userData, contact: e.target.value })}
-          />
+          <p>{userData.contact}</p>
         </div>
         <div className="mb-4">
           <label className="block text-gray-700">Address</label>
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-300 rounded mt-1"
-            value={userData.address || ''}
-            onChange={(e) => setUserData({ ...userData, address: e.target.value })}
-          />
+          <p>{userData.address}</p>
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Profile Image</label>
-          <input
-            type="file"
-            className="w-full p-2 border border-gray-300 rounded mt-1"
-            onChange={(e) => setUserData({ ...userData, profileImage: e.target.files[0] })}
-          />
+        <div className="mt-4 text-center">
+          <Link to="/update-profile" className="text-blue-500 hover:underline">
+            Update Profile
+          </Link>
         </div>
-        <button
-          onClick={handleUpdate}
-          className="w-full bg-blue-500 text-white p-2 rounded mt-4 hover:bg-blue-600 transition duration-200"
-        >
-          Update Profile
-        </button>
-      </div>
-      <div className="mt-4 text-center">
-        <Link to="/update-password" className="text-blue-500 hover:underline">
-          Update Password
-        </Link>
       </div>
     </div>
   );

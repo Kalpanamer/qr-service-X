@@ -3,9 +3,12 @@ import axios from "axios";
 import { API_URI } from "../../url.config"
 import useWindowSize from 'react-use/lib/useWindowSize';
 import Confetti from 'react-confetti';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const VerifyEmail = () => {
+
+  const navigate = useNavigate();
+
   const [message, setMessage] = useState("");
   const [showConfetti, setShowConfetti] = useState(false); // State to control Confetti rendering
   const [userInfo, setUserInfo] = useState({ name: "", email: "" });
@@ -26,6 +29,7 @@ const VerifyEmail = () => {
           }
         })
         .catch((error) => {
+          console.log(error)
           setMessage("Email verification failed.");
         });
     }
@@ -37,6 +41,10 @@ const VerifyEmail = () => {
       const timer = setTimeout(() => {
         setShowConfetti(false);
       }, 5000);
+      setTimeout(() => {
+        navigate("/login");
+      }, 6000)
+      
       return () => clearTimeout(timer);
     }
   }, [showConfetti]);
