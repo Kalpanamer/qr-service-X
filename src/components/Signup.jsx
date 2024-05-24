@@ -1,7 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { API_URI } from "../../url.config"
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      toast.success("You are already logged in", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
+    }
+  }, [navigate]);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -16,16 +38,25 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("https://newupdate-vcdv.onrender.com/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-    const data = await response.json();
-    if (data.success) {
-      toast.success(
-        "Signup successful, please check your email for verification link",
-        {
+    try {
+      const response = await axios.post(`${API_URI}/auth/signup`, formData);
+      const data = await response.data;
+      if (data.msg === "User registered, please verify your email") {
+        toast.success(
+          "Signup successful, please check your email for verification link",
+          {
+            position: "bottom-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          }
+        );
+      } else if (data.msg === "User already exists") {
+        toast.info("User already exists", {
           position: "bottom-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -33,20 +64,22 @@ const Signup = () => {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "light",
-        }
-      );
-    } else {
-      toast.error("Signup failed, please try again", {
-        position: "bottom-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+          theme: "dark",
+        });
+      } else {
+        toast.error("Signup failed, please try again", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 

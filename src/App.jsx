@@ -1,21 +1,33 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import Home from './components/Home';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import VerifyEmail from './components/VerifyEmail';
+import Profile from './components/Profile';
+import ResetPassword from './components/ResetPassword';
+import UpdatePassword from './components/UpdatePassword';
+import Navbar from './components/Navbar';
 
 const App = () => {
+
+
   return (
     <div>
+      <Navbar />
       <Routes>
-        <Route path="/" element={<Signup />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/frgt-pass" element={<ResetPassword />} />
+        <Route path="/update-password" element={<UpdatePassword />} />
       </Routes>
       <ToastContainer />
-      </div>
+    </div>
   );
 };
 
